@@ -1,13 +1,26 @@
 import React,{useEffect} from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { fetchGetSuccess,fetchGetFailure } from "../redux/actions/getFetchAction";
+import { addToCart } from "../redux/actions/cartAction";
 import axios from "axios";
+import { toast,ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
-const GetData = ({addToCart, setAddToCart}) =>{
+const GetData = () =>{
     const dispatch = useDispatch();
-    const {data,error} = useSelector(state=>state)
+    const {data,error} = useSelector(state=>state.fetch)
 
-    console.log(addToCart);
+    
+    const notify = () =>{
+        toast.success("Added To cart")
+    }
+
+    function addingInCart(item){
+        dispatch(addToCart(item));
+        notify();
+    }
+
+  
     
     useEffect(()=>{
        
@@ -35,7 +48,7 @@ const GetData = ({addToCart, setAddToCart}) =>{
                    <img  src={item.thumbnail} width={280} height={350} />
                    <p className="title"><b>Title:</b> {item.title}</p>
                    <p><b>Price:</b> ${item.price}</p>
-                   <button onClick={()=>setAddToCart([...addToCart,item])}>Add To Cart</button>
+                   <button onClick={()=>addingInCart(item)}>Add To Cart</button>
                 </div>
             ))
         }
